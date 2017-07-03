@@ -1,0 +1,12 @@
+{
+  "name": "chat-server",
+  "version": "0.0.1",
+  "description": "Chat server",
+  "main": "server.js",
+  "author": "Daniel González Reina",
+  "license": "MIT",
+  "dependencies": {
+    "markdown": "^0.5.0",
+    "ws": "^3.0.0"
+  }
+}
