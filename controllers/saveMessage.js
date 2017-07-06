@@ -6,18 +6,11 @@ function saveMessage(db, message) {
   dateDay = dateDay.length === 1 ? '0' + dateDay : dateDay;
   const dateString = dateYear + dateMonth + dateDay;
 
-  const messageObj = {
-    user: message.sendUser,
-    rawMessage: message.rawMessage,
-    htmlMessage: message.htmlMessage,
-    timestamp: message.timestamp
-  }
-
   db.collection('messagesDaily').update(
     { day: dateString },
     {
       //$setOnInsert: { messages: [] },
-      $push: { messages: messageObj }
+      $push: { messages: message }
     },
     { upsert: true }
   )

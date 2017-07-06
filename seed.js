@@ -5,17 +5,17 @@ const MongoClient = mongo.MongoClient;
 MongoClient.connect('mongodb://localhost:27017/chat')
 .then((db) => {
   let dummyMsg = {
-    rawMessage: 'Test message',
-    htmlMessage: '<p>Test message</p>',
-    sendUser: 0,
+    rawMessage: 'Test message next day',
+    htmlMessage: '<p>Test message next day</p>',
+    userId: 0,
     timestamp: new Date()
   };
   saveMessage(db, dummyMsg);
   setTimeout(() => {
     let dummyMsg = {
-      rawMessage: 'Test message 2',
-      htmlMessage: '<p>Test message 2</p>',
-      sendUser: 1,
+      rawMessage: 'Test message 2 next day',
+      htmlMessage: '<p>Test message 2 next day</p>',
+      userId: 1,
       timestamp: new Date()
     };
     saveMessage(db, dummyMsg);
