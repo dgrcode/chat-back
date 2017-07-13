@@ -1,8 +1,13 @@
+require('dotenv').config();
 const WebSocket = require('ws');
 const mongo = require('mongodb');
 const markdown = require('markdown').markdown;
 const getInitialMessages = require('./controllers/getInitialMessages');
 const saveMessage = require('./controllers/saveMessage');
+
+const usedPort = process.env.PORT || 4000;
+const usedWsAddress = 'ws://' + process.env.IP + ':' + usedPort;
+const usedName = process.env.NAME;
 
 let db = null;
 const MongoClient = mongo.MongoClient;
@@ -16,16 +21,27 @@ MongoClient.connect('mongodb://localhost:27017/chat')
 });
 
 
-const wss = new WebSocket.Server({ port: 4000 });
+const wss = new WebSocket.Server({ port: usedPort });
 
 wss.on('connection', (ws) => {
-  console.log('Connected to 4000');
+  console.log('New connection');
+  
+  ws.send(JSON.stringify(
+    {
+      type: 'HANDSHAKE',
+      payload: {
+        name: usedName
+      }
+    }
+  ));
 
   getInitialMessages(db)
   .then((initialMessages) => {
     const messageGroupAction = {
       type: 'MESSAGE_GROUP',
-      payload: initialMessages
+      payload: {
+        messages: initialMessages
+      }
     }
     ws.send(JSON.stringify(messageGroupAction));
   });
@@ -36,7 +52,7 @@ wss.on('connection', (ws) => {
       rawMessage: data.payload.rawMessage,
       htmlMessage: markdown.toHTML(data.payload.rawMessage),
       timestamp: new Date(),
-      userId: data.payload.userId
+      userId: data.payload.userId,
     }
     
     saveMessage(db, dbMessage);
@@ -62,4 +78,4 @@ wss.on('connection', (ws) => {
   });
 });
 
-console.log('Done.');
+console.log('Serving at: \'' + usedWsAddress + '\'');
