@@ -1,3 +1,5 @@
+'use strict';
+
 const getInitialMessages = (db) => new Promise((resolve, reject) => {
   const date = new Date();
   const dateYear = date.getFullYear().toString();

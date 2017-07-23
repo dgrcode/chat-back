@@ -1,3 +1,5 @@
+'use strict';
+
 function saveMessage(db, message) {
   const dateYear = message.timestamp.getFullYear().toString();
   let dateMonth = (message.timestamp.getMonth() + 1).toString();
