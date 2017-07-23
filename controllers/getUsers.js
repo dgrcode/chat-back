@@ -10,6 +10,6 @@ const getUsers = db =>
         return Object.assign(acc, uObj)
       } , {}))
   }))
-  .catch(err => console.log('Error getting the users\n', err););
+  .catch(err => console.log('Error getting the users\n', err));
 
 module.exports = getUsers;

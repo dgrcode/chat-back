@@ -14,7 +14,6 @@ const usedPort = process.env.PORT || 4000;
 const usedWsAddress = 'ws://' + ip.address() + ':' + usedPort;
 const usedServerName = process.env.NAME;
 
-//let db = null;
 const MongoClient = mongo.MongoClient;
 const dbPromise = MongoClient.connect('mongodb://localhost:27017/chat');
 
@@ -34,22 +33,6 @@ function* clientIdGenerator (seed = new Date().valueOf()) {
   }
 }
 const idGen = clientIdGenerator();
-
-// TODO get users ready and don't start to listen to the ws connection until
-// this is finished
-// TODO NAME this might not make much sense
-//const users = {};
-
-/*
-dbPromise
-.then((connectedDb) => {
-  db = connectedDb;
-})
-.catch((err) => {
-  console.log('Error connecting to the DB.');
-  console.log(err);
-});
-*/
 
 const wss = new WebSocket.Server({ port: usedPort });
 
@@ -87,13 +70,12 @@ wss.on('connection', (ws, req) => {
 
   ws.on('message', (data) => {
     data = JSON.parse(data);
-    console.log(data);
+    //console.log(data);
     
     let wsAction;
     switch (data.type) {
     case 'HANDSHAKE_USER_INFO':
       let userId = data.payload.userId;
-      console.log('current userId', userId);
       new Promise( (resolve, reject) => {
         if (userId === undefined) {
           idGen.next().value.then( id => {
@@ -135,11 +117,8 @@ wss.on('connection', (ws, req) => {
       })
       .catch( err => console.log('Error when resolving the userId\n', err));
       break;
-    
+
     case 'NAME_CHANGE':
-      // TODO NAME change this on the database too, and then send a broadcast
-      // with the updated information
-      // users[data.payload.userId].name = data.payload.name;
       dbPromise.then( db => updateUserName(db, data.payload.userId, data.payload.name))
       wsAction = {
         type: 'NAME_CHANGE',
@@ -151,7 +130,7 @@ wss.on('connection', (ws, req) => {
       }
       broadcast(wsAction);
       break;
-      
+
     case 'MESSAGE':
       const dbMessage = {
         rawMessage: data.payload.rawMessage,
@@ -171,14 +150,11 @@ wss.on('connection', (ws, req) => {
       };
       broadcast(wsMessage);
       break;
-    
+
     default:
       // do nothing
-      
+
     }
-    
-    
-    
   });
 });
 
