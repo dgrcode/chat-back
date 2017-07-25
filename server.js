@@ -12,7 +12,13 @@ const updateUserName = require('./controllers/updateUserName');
 
 const usedPort = process.env.PORT || 4000;
 const usedWsAddress = 'ws://' + ip.address() + ':' + usedPort;
-const usedServerName = process.env.NAME;
+const usedServerName = process.env.NAME || "No name";
+if (!process.env.NAME) {
+  console.warn('!  Your server name will default to "No name".\n' +
+    '!  You can change the name by creating a file named ".env" in\n' +
+    '!  the root of the project with the contents:\n' +
+    '!  \tNAME="The name you want to display"');
+}
 
 const MongoClient = mongo.MongoClient;
 const dbPromise = MongoClient.connect('mongodb://localhost:27017/chat');
@@ -46,7 +52,7 @@ const broadcast = wsAction => {
 
 wss.on('connection', (ws, req) => {
   console.log('New connection');
-  
+
   const initialMessagesPromise = dbPromise.then(getInitialMessages)
     .catch( err => console.log('Error gettign initial messages.\n', err));
   const userNamesPromise = dbPromise.then(getUsers)
@@ -71,7 +77,7 @@ wss.on('connection', (ws, req) => {
   ws.on('message', (data) => {
     data = JSON.parse(data);
     //console.log(data);
-    
+
     let wsAction;
     switch (data.type) {
     case 'HANDSHAKE_USER_INFO':
@@ -158,4 +164,11 @@ wss.on('connection', (ws, req) => {
   });
 });
 
-console.log('Serving at: \'' + usedWsAddress + '\'');
+console.log('Serving ' + usedServerName + ' at: \'' + usedWsAddress + '\'');
+
+function exitHandler() {
+    console.log('\n\n!!  REMEMBER TO RUN "yarn kill" TO STOP THE DATABASE  !!');
+}
+process.on('exit', exitHandler);
+process.on('SIGINT', exitHandler);
+process.on('uncaughtException', exitHandler);

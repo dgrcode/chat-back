@@ -9,6 +9,7 @@
     "prestart": "node dbChecker.js",
     "start": "mongod -dbpath ./data/db --fork --logpath /dev/null",
     "poststart": "node server.js",
+    "kill": "mongo admin --eval 'db.shutdownServer()' > /dev/null"
   },
   "dependencies": {
     "dotenv": "^4.0.0",
