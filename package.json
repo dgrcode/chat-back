@@ -6,7 +6,9 @@
   "author": "Daniel González Reina",
   "license": "MIT",
   "scripts": {
-    "db": "mongod -dbpath ./db"
+    "prestart": "node dbChecker.js",
+    "start": "mongod -dbpath ./data/db --fork --logpath /dev/null",
+    "poststart": "node server.js",
   },
   "dependencies": {
     "dotenv": "^4.0.0",
