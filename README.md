@@ -1,4 +1,4 @@
-![Cahat logo](cathat.svg)
+![Cahat logo](https://github.com/dgrcode/chat-back/blob/master/cathat.svg)
 
 # CAHAT
 A distributed chat service
