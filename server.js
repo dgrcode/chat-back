@@ -21,7 +21,8 @@ if (!process.env.NAME) {
 }
 
 const MongoClient = mongo.MongoClient;
-const dbPromise = MongoClient.connect('mongodb://localhost:27017/chat');
+const dbPromise = MongoClient.connect('mongodb://127.0.0.1:27017/chat')
+  .catch( err => console.log('Connection failed\n', err));
 
 function* clientIdGenerator (seed = new Date().valueOf()) {
   // TODO improve the seed
@@ -54,9 +55,9 @@ wss.on('connection', (ws, req) => {
   console.log('New connection');
 
   const initialMessagesPromise = dbPromise.then(getInitialMessages)
-    .catch( err => console.log('Error gettign initial messages.\n', err));
+    .catch( err => console.log('Error getting initial messages.\n', err));
   const userNamesPromise = dbPromise.then(getUsers)
-    .catch( err => console.log('Error gettign user names.\n', err));
+    .catch( err => console.log('Error getting user names.\n', err));
 
   Promise.all([
     initialMessagesPromise,
@@ -164,11 +165,12 @@ wss.on('connection', (ws, req) => {
   });
 });
 
-console.log('Serving ' + usedServerName + ' at: \'' + usedWsAddress + '\'');
+console.log('Serving ' + usedServerName + ' at: \'' + usedWsAddress + '\'\n' +
+  '\nWhen you stop the server, run "yarn kill" to stop the database\n');
 
 function exitHandler() {
     console.log('\n\n!!  REMEMBER TO RUN "yarn kill" TO STOP THE DATABASE  !!');
 }
-process.on('exit', exitHandler);
+//process.on('exit', exitHandler);
 process.on('SIGINT', exitHandler);
-process.on('uncaughtException', exitHandler);
+//process.on('uncaughtException', exitHandler);

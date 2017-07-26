@@ -6,9 +6,12 @@
   "author": "Daniel González Reina",
   "license": "MIT",
   "scripts": {
-    "prestart": "node dbChecker.js",
-    "start": "mongod -dbpath ./data/db --fork --logpath /dev/null",
-    "poststart": "node server.js",
+    "db": "mongod -dbpath ./data/db",
+    "prestart:db": "node dbChecker.js",
+    "start:db": "mongod -dbpath ./data/db --fork --logpath /dev/null",
+    "poststart:db": "node seed.js",
+    "start:server": "node server.js",
+    "start": "npm run start:db && npm run start:server",
     "kill": "mongo admin --eval 'db.shutdownServer()' > /dev/null"
   },
   "dependencies": {
