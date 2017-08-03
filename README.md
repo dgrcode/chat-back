@@ -13,7 +13,17 @@ To use cahat you need to have [Node](https://nodejs.org/en/), [npm](https://www.
 
 ### Instructions
 
-Once you have the dependencies installed, it should be really easy to get a server running. The steps to follow are
+Once you have the dependencies installed, it should be really easy to get a server running.
+
+**TL;DR**
+```js
+git clone https://github.com/dgrcode/chat-back.git
+npm install
+npm start
+```
+
+**Detailed version**
+The steps to follow are
 
 1. Clone this repo. With a terminal, go to the folder where you want to keep your files, and then run this command:
     ```
@@ -51,9 +61,9 @@ Once you have the dependencies installed, it should be really easy to get a serv
     ```
 
 
-## :no_entry: Disclaimer
+## :no_entry: Disclaimer :no_entry:
 
-This project don't implement any security measure. Therefore, **any data transmitted through this chat service could be compromised**
+This project doesn't implement any security measure. Therefore, **any data transmitted through this chat service could be compromised**
 
 
 ## Motivation
