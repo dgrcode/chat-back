@@ -142,7 +142,7 @@ wss.on('connection', (ws, req) => {
       const dbMessage = {
         rawMessage: data.payload.rawMessage,
         htmlMessage: markdown.toHTML(data.payload.rawMessage),
-        timestamp: new Date(),
+        timestamp: new Date().getTime(),
         userId: data.payload.userId,
       }
       dbPromise.then( db => saveMessage(db, dbMessage));
