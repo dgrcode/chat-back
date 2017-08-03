@@ -18,6 +18,7 @@ Once you have the dependencies installed, it should be really easy to get a serv
 **TL;DR**
 ```js
 git clone https://github.com/dgrcode/chat-back.git
+cd chat-back
 npm install
 npm start
 ```
